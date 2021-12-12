@@ -26,6 +26,8 @@ def AutoDate():
     DMY = today.strftime("%d" + mon + "%Y")
     return DMY
 
+
+'''AutoDate function detect date automatically where inputDate has to be entered manually'''
 # DMY = AutoDate()
 DMY = inputDate()
 
@@ -43,8 +45,8 @@ def ftpfile(DMY):
     ftp.cwd(path)
 
     try:
-        # dir1 = input("enter path with / in front and back:")
-        dir1 = "/home/nithin/Documents/sample/new/check/"
+        dir1 = input("enter path with / in front and back:")
+        #dir1 = "/home/nithin/Documents/sample/new/check/"
 
         fName1 = "contract.gz_" + DMY
         fName2 = "nnf_participant.gz_" + DMY
@@ -70,36 +72,37 @@ def ftpfile(DMY):
 
         ftp.close()
         print("Downloaded")
+        try:
+            with open(pdir1, 'rb') as f_in:
+                with gzip.open(dir1 + fName1 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
     
-        with open(pdir1, 'rb') as f_in:
-            with gzip.open(dir1 + fName1 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-        with open(pdir2, 'rb') as f_in:
-            with gzip.open(dir1 +fName2 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-        with open(pdir3, 'rb') as f_in:
-            with gzip.open(dir1 +fName3 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-
-        with open(pdir4, 'rb') as f_in:
-            with gzip.open(dir1 +fName4 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-
-        with open(pdir5, 'rb') as f_in:
-            with gzip.open(dir1 +fName5 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-
-        with open(pdir6, 'rb') as f_in:
-            with gzip.open(dir1 +fName6 + '.txt', 'wb') as f_out:
-                shutil.copyfileobj(f_in, f_out)
-
-        print("Extracted!!!...")
-
+            with open(pdir2, 'rb') as f_in:
+                with gzip.open(dir1 +fName2 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    
+            with open(pdir3, 'rb') as f_in:
+                with gzip.open(dir1 +fName3 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    
+    
+            with open(pdir4, 'rb') as f_in:
+                with gzip.open(dir1 +fName4 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    
+    
+            with open(pdir5, 'rb') as f_in:
+                with gzip.open(dir1 +fName5 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    
+    
+            with open(pdir6, 'rb') as f_in:
+                with gzip.open(dir1 +fName6 + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+    
+            print("Extracted!!!...")
+        except:
+            print("zip file path can't found")
 
     except:
         print("File not Found in FTP")
