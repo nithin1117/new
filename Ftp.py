@@ -1,8 +1,8 @@
 from ftplib import FTP
 import gzip
 import shutil
-    
-    
+
+
 def inputDate():
     import datetime
     import calendar
@@ -46,7 +46,7 @@ def ftpfile(DMY):
 
     try:
         dir1 = input("enter path with / in front and back:")
-        #dir1 = "/home/nithin/Documents/sample/new/check/"
+        # dir1 = "/home/nithin/Documents/sample/new/check/"
 
         fName1 = "contract.gz_" + DMY
         fName2 = "nnf_participant.gz_" + DMY
@@ -62,7 +62,6 @@ def ftpfile(DMY):
         pdir5 = dir1 + fName5
         pdir6 = dir1 + fName6
 
-
         ftp.retrbinary("RETR " + fName1, open(pdir1, 'wb').write)
         ftp.retrbinary("RETR " + fName2, open(pdir2, 'wb').write)
         ftp.retrbinary("RETR " + fName3, open(pdir3, 'wb').write)
@@ -74,32 +73,29 @@ def ftpfile(DMY):
         print("Downloaded")
         try:
             with open(pdir1, 'rb') as f_in:
-                with gzip.open(dir1 + fName1 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir1[:-13] + DMY + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
+
             with open(pdir2, 'rb') as f_in:
-                with gzip.open(dir1 +fName2 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir2[:-13] + DMY + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
+
             with open(pdir3, 'rb') as f_in:
-                with gzip.open(dir1 +fName3 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir3[:-13] + DMY + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
-    
+
             with open(pdir4, 'rb') as f_in:
-                with gzip.open(dir1 +fName4 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir4[:-13] + DMY + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
-    
+
             with open(pdir5, 'rb') as f_in:
-                with gzip.open(dir1 +fName5 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir5[:-4] + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
-    
+
             with open(pdir6, 'rb') as f_in:
-                with gzip.open(dir1 +fName6 + '.txt', 'wb') as f_out:
+                with gzip.open(pdir6[:-4] + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
-    
+
             print("Extracted!!!...")
         except:
             print("zip file path can't found")
