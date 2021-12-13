@@ -2,7 +2,7 @@ from ftplib import FTP
 import gzip
 import shutil
 import argparse
-
+import os
 
 
 ap = argparse.ArgumentParser()
@@ -55,8 +55,14 @@ def ftpfile(dmy):
     ftp.cwd(path)
 
     try:
-        dir1 = input("enter path with / in front and back:")
-        # dir1 = "/home/nithin/Documents/sample/new/check/"
+        
+        key = 'FTPFILES'
+        value = os.getenv(key)
+        
+        dir1 =value + "/"
+        print(dir1)
+        
+        #dir1 = "/home/nithin/Documents/sample/new/check/"
 
         fName1 = "contract.gz_" + dmy
         fName2 = "nnf_participant.gz_" + dmy
@@ -110,7 +116,7 @@ def ftpfile(dmy):
         except:
             print("zip file path can't found")
 
-    except:
+    except :
         print("File not Found in FTP")
 
 
