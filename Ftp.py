@@ -1,43 +1,53 @@
 from ftplib import FTP
 import gzip
 import shutil
+import argparse
 
 
-def inputDate():
-    import datetime
-    import calendar
-    while True:
-        day = input('Enter date[DD/MM/YYYY]:')
-        try:
-            day = datetime.datetime.strptime(day, "%d/%m/%Y")
-            break
-        except ValueError:
-            print('Error:Date format try entering in DD/MM/YYYY')
 
-    mon = calendar.month_abbr[int(day.month)]
-    DMY = (f"{day.day}" + mon + f"{day.year}")
-    return DMY
+ap = argparse.ArgumentParser()
+ap.add_argument("-d", "--date", help="name of the user")
+args = vars(ap.parse_args())
+dmy = args["date"]
 
 
 def AutoDate():
     from datetime import date
     today = date.today()
     mon = today.strftime("%b")
-    DMY = today.strftime("%d" + mon + "%Y")
-    return DMY
+    dmy = today.strftime("%d" + mon + "%Y")
+    return dmy
 
 
-'''AutoDate function detect date automatically where inputDate has to be entered manually'''
-# DMY = AutoDate()
-DMY = inputDate()
+if dmy == None:
+    dmy= AutoDate()
 
-if DMY[1].isalpha():
-    DMY = DMY.zfill(9)
+else:
+    import datetime
+    import calendar
+    import sys
+
+    while True:
+        day = dmy
+        try :
+            day = datetime.datetime.strptime(day, "%d/%m/%Y")
+            break
+        except ValueError:
+            print('Error: Invalid Date Format, Try DD/MM/YYY')
+            sys.exit()
+
+    mon = calendar.month_abbr[int(day.month)]
+    dmy = (f"{day.day}" + mon + f"{day.year}")
+
+
+
+if dmy[1].isalpha():
+    dmy = dmy.zfill(9)
 else:
     pass
 
 
-def ftpfile(DMY):
+def ftpfile(dmy):
     ftp = FTP('ftp.connect2nse.com')
     ftp.login('FTPGUEST', 'FTPGUEST')
 
@@ -48,10 +58,10 @@ def ftpfile(DMY):
         dir1 = input("enter path with / in front and back:")
         # dir1 = "/home/nithin/Documents/sample/new/check/"
 
-        fName1 = "contract.gz_" + DMY
-        fName2 = "nnf_participant.gz_" + DMY
-        fName3 = "nnf_security.gz_" + DMY
-        fName4 = "participant.gz_" + DMY
+        fName1 = "contract.gz_" + dmy
+        fName2 = "nnf_participant.gz_" + dmy
+        fName3 = "nnf_security.gz_" + dmy
+        fName4 = "participant.gz_" + dmy
         fName5 = "security.gz"
         fName6 = "spd_contract.gz"
 
@@ -73,19 +83,19 @@ def ftpfile(DMY):
         print("Downloaded")
         try:
             with open(pdir1, 'rb') as f_in:
-                with gzip.open(pdir1[:-13] + DMY + '.txt', 'wb') as f_out:
+                with gzip.open(pdir1[:-13] + dmy + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             with open(pdir2, 'rb') as f_in:
-                with gzip.open(pdir2[:-13] + DMY + '.txt', 'wb') as f_out:
+                with gzip.open(pdir2[:-13] + dmy + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             with open(pdir3, 'rb') as f_in:
-                with gzip.open(pdir3[:-13] + DMY + '.txt', 'wb') as f_out:
+                with gzip.open(pdir3[:-13] + dmy + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             with open(pdir4, 'rb') as f_in:
-                with gzip.open(pdir4[:-13] + DMY + '.txt', 'wb') as f_out:
+                with gzip.open(pdir4[:-13] + dmy + '.txt', 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
             with open(pdir5, 'rb') as f_in:
@@ -104,4 +114,4 @@ def ftpfile(DMY):
         print("File not Found in FTP")
 
 
-ftpfile(DMY)
+ftpfile(dmy)
