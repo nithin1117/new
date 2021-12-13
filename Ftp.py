@@ -12,7 +12,7 @@ def inputDate():
             day = datetime.datetime.strptime(day, "%d/%m/%Y")
             break
         except ValueError:
-            print('Error: Accepted format DD/MM/YYYY')
+            print('Error:Date format try entering in DD/MM/YYYY')
 
     mon = calendar.month_abbr[int(day.month)]
     DMY = (f"{day.day}" + mon + f"{day.year}")
