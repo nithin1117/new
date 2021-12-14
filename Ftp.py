@@ -58,9 +58,7 @@ def ftpfile(dmy):
         
         key = 'FTPFILES'
         value = os.getenv(key)
-        
-        dir1 =value + "/"
-        print(dir1)
+        dir1 = value + "/"     
         
         #dir1 = "/home/nithin/Documents/sample/new/check/"
 
