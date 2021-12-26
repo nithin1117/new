@@ -52,7 +52,7 @@ def ftpfile(dmy):
     try:
         #key = 'FTPFILES'
         #dir = os.getenv(key) + "/"
-        dir = "/home/nithin/Documents/script/sample/"
+        dir = "/home/nithin/dataCollect/trimData/test/src/script/files/"
         try:
             fName = [
                 "contract.gz_" + dmy,
