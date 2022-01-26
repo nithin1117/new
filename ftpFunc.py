@@ -3,6 +3,7 @@ import gzip
 import shutil
 import argparse
 import os
+from ftplib import error_perm
 
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--date", help="name of the user")
@@ -18,7 +19,7 @@ def AutoDate():
     return dmy
 
 
-if dmy == None:
+if dmy is None:
     dmy = AutoDate()
 else:
     import datetime
@@ -37,61 +38,49 @@ else:
     mon = calendar.month_abbr[int(day.month)]
     dmy = (f"{day.day}" + mon + f"{day.year}")
 
-
 if dmy[1].isalpha():
     dmy = dmy.zfill(9)
 else:
     pass
 
 
-def ftpfile(dmy):
+def ftpFile(dmy):
     ftp = FTP('ftp.connect2nse.com')
     ftp.login('FTPGUEST', 'FTPGUEST')
     path = '/Common/NTNEAT'
     ftp.cwd(path)
     try:
-        #key = 'FTPFILES'
-        #dir = os.getenv(key) + "/"
-        dir = "/home/nithin/dataCollect/trimData/test/src/script/files/"
-        try:
-            fName = [
-                "contract.gz_" + dmy,
-                "nnf_participant.gz_" + dmy,
-                "nnf_security.gz_" + dmy,
-                "participant.gz_" + dmy,
-                "security.gz",
-                "spd_contract.gz",
-            ]
-            for i in range(4):
-                pathDir = dir + fName[i]
-                ftp.retrbinary("RETR " + fName[i], open(pathDir, 'wb').write)
-                
+        # key = 'FTPFILES'
+        # dir = os.getenv(key) + "/"
+        dir = "D:/New1folder/"
 
-                with open(pathDir, 'rb') as f_in:
-                    with gzip.open(pathDir[:-13]+ dmy + '.txt', 'wb') as f_out:
-                        shutil.copyfileobj(f_in, f_out)
-                        
-            for i in range(4, 6):
-                pathDir = dir + fName[i]
-                ftp.retrbinary("RETR " + fName[i], open(pathDir, 'wb').write)
-                
+        fName = [
+            "contract.gz_" + dmy,
+            "nnf_participant.gz_" + dmy,
+            "nnf_security.gz_" + dmy,
+            "participant.gz_" + dmy,
+            "security.gz_" + dmy,
+            "spd_contract.gz_" + dmy,
+        ]
 
-                with open(pathDir, 'rb') as f_in:
-                    with gzip.open(pathDir[:-3] + '.txt', 'wb') as f_out:
-                        shutil.copyfileobj(f_in, f_out)
-            ftp.close()
+        for i in range(6):
+            pathDir = dir + fName[i]
+            ftp.retrbinary("RETR " + fName[i], open(pathDir[:-10], 'wb').write)
 
-        except:
-            print("Error: File not found for particular date in FTP")
-            return "error"
+            with gzip.open(pathDir[:-10], 'rb') as f_in:
+                with open(pathDir[:-13] + dmy + '.txt', 'wb') as f_out:
+                    shutil.copyfileobj(f_in, f_out)
+
+        ftp.close()
+        print(f"Downloaded and extracted for date: {dmy}")
+
+    except error_perm as msg:
+        print(f"File not found for particular date: {dmy}")
+
     except:
-        print("Error: path location had not prefered")
+        print("Error Occurred, check the path directory")
         print("run 'sudo gedit /etc/environment' and set 'FTPFILES = *desired directory*'")
-        sys.exit()
 
 
-check = ftpfile(dmy)
+ftpFile(dmy)
 
-if check != "error":
-    print("Downloaded and extracted!")
-    
