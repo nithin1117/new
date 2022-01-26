@@ -5,6 +5,13 @@ import argparse
 import os
 from ftplib import error_perm
 
+
+'''to set environment variable run: 
+~ sudo gedit /etc/environment 
+~ FTPFILES = *desired directory*
+'''
+
+
 ap = argparse.ArgumentParser()
 ap.add_argument("-d", "--date", help="name of the user")
 args = vars(ap.parse_args())
@@ -44,31 +51,33 @@ else:
     pass
 
 
+
 def ftpFile(dmy):
     ftp = FTP('ftp.connect2nse.com')
     ftp.login('FTPGUEST', 'FTPGUEST')
     path = '/Common/NTNEAT'
     ftp.cwd(path)
     try:
-        # key = 'FTPFILES'
-        # dir = os.getenv(key) + "/"
-        dir = "D:/New1folder/"
+        # dir = os.getenv(FTPFILES) + "/"
+        dir = "D:/New folder/"
 
         fName = [
-            "contract.gz_" + dmy,
-            "nnf_participant.gz_" + dmy,
-            "nnf_security.gz_" + dmy,
-            "participant.gz_" + dmy,
-            "security.gz_" + dmy,
-            "spd_contract.gz_" + dmy,
+            "contract.gz_",
+            "nnf_participant.gz_",
+            "nnf_security.gz_",
+            "participant.gz_",
+            "security.gz_",
+            "spd_contract.gz_",
         ]
 
         for i in range(6):
-            pathDir = dir + fName[i]
-            ftp.retrbinary("RETR " + fName[i], open(pathDir[:-10], 'wb').write)
+            pathDir = dir+fName[i][:-4]+"_"+dmy+".gz"
+            txtFile = dir+fName[i][:-4]+"_"+dmy+".txt"
 
-            with gzip.open(pathDir[:-10], 'rb') as f_in:
-                with open(pathDir[:-13] + dmy + '.txt', 'wb') as f_out:
+            ftp.retrbinary("RETR " + fName[i] + dmy , open(pathDir, 'wb').write)
+
+            with gzip.open(pathDir, 'rb') as f_in:
+                with open(txtFile, 'wb') as f_out:
                     shutil.copyfileobj(f_in, f_out)
 
         ftp.close()
@@ -78,9 +87,7 @@ def ftpFile(dmy):
         print(f"File not found for particular date: {dmy}")
 
     except:
-        print("Error Occurred, check the path directory")
-        print("run 'sudo gedit /etc/environment' and set 'FTPFILES = *desired directory*'")
+        print("Unknown Error Occurred!")
 
 
 ftpFile(dmy)
-
