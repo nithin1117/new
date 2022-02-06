@@ -58,8 +58,9 @@ def ftpFile(dmy):
     path = '/Common/NTNEAT'
     ftp.cwd(path)
     try:
-        # dir = os.getenv(FTPFILES) + "/"
-        dir = "D:/New folder/"
+        key = "FTPFILES"
+        dir = os.getenv(key) + "/"
+        # dir = "D:/New folder/"
 
         fName = [
             "contract.gz_",
